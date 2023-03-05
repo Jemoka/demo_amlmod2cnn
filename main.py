@@ -14,10 +14,11 @@ import torch.nn as nn
 import pandas as pd
 import numpy as np
 from collections import defaultdict
-
 from torch.utils.data import DataLoader, TensorDataset
 # Images!
 from PIL import Image
+# Loading bar. See below where it is used
+from tqdm import tqdm
 
 #### Constants ####
 # It is generally a good idea to leave the constants up top so you
@@ -202,7 +203,12 @@ optim = torch.optim.Adam(model.parameters(), lr=LR)
 for e in range(EPOCHS):
     print(f"Training epoch {e}!")
 
-    for x,y in iter(train_loader):
+    for x,y in tqdm(iter(train_loader), total=len(train_loader)): # what's this tqdm business?
+                                                                  # wrapping a loop with tqdm will print a fancy loading
+                                                                  # bar on screen which you can use to track progress
+                                                                  # of training a batch. It is transparent in all other respects
+                                                                  # and will just dump the output of iter(train_loader)
+                                                                  # so this loop is effectively just `for x,y in iter(train_loader):`
         # compute output
         output = model(x)
 
